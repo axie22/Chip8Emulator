@@ -8,7 +8,8 @@ class Chip8 {
     public:
         Chip8();
         void Cycle();
-        
+        void LoadROM(char const* filename);
+
         uint8_t registers[16]{};
         uint8_t memory[4096]{};
         uint16_t index{};
