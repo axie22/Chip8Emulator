@@ -117,3 +117,35 @@ void Chip8::OP_Annn() {
     uint16_t address = (opcode & 0x0FFFu);
     index = address;
 }
+
+void Chip8::OP_Dxyn() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+    uint8_t height = opcode & 0x000Fu;
+    uint8_t xPos = registers[Vx] % 64;
+    uint8_t yPos = registers[Vy] % 32;
+
+    registers[0xF] = 0; // Reset collision flag
+
+    for (unsigned int row = 0; row < height; ++row) {
+        // Fetch the sprite byte from memory starting at the 'index' register
+        uint8_t spriteByte = memory[index + row];
+
+        for (unsigned int col = 0; col < 8; ++col) {
+            uint8_t spritePixel = spriteByte & (0x80u >> col);
+            uint32_t* screenPixel = &video[(yPos + row) * 64 + (xPos + col)];
+
+            if (spritePixel) {
+                if (*screenPixel == 0xFFFFFFFF) {
+                    registers[0xF] = 1;
+                }
+                *screenPixel ^= 0xFFFFFFFF;
+            }
+        }
+    }
+}
+
+void Chip8::OP_00E0() {
+    memset(video, 0, sizeof(video));
+}
+
