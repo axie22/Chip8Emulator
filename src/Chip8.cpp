@@ -151,10 +151,33 @@ void Chip8::OP_00E0() {
     memset(video, 0, sizeof(video));
 }
 
-void Chip8::OP_NULL() {
-    
+void Chip8::OP_2nnn() {
+    stack[sp] = pc;
+    sp++;
+    pc = (opcode & 0x0FFF);
 }
 
 void Chip8::OP_00EE() {
+    sp--;
+    pc = stack[sp];
+}
 
+void Chip8::OP_3xkk() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t kk = (opcode & 0x00FFu);
+    if (registers[Vx] == kk) {
+        pc += 2;
+    }
+}
+
+void Chip8::OP_4xkk() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t kk = (opcode & 0x00FFu);
+    if (registers[Vx] != kk) {
+        pc += 2;
+    }
+}
+
+void Chip8::OP_NULL() {
+    
 }

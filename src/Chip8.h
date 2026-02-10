@@ -26,6 +26,9 @@ class Chip8 {
         void OP_00E0(); // CLS (Clear Display)
         void OP_00EE(); // RET (Return from subroutine)
         void OP_1nnn(); // JP addr (Jump)
+        void OP_2nnn(); // CALL addr
+        void OP_3xkk();
+        void OP_4xkk();
         void OP_6xkk(); // LD Vx, byte (Set register Vx = kk)
         void OP_7xkk(); // ADD Vx, byte (Set register Vx = Vx + kk)
         void OP_Annn(); // LD I, addr (Set Index = nnn)
