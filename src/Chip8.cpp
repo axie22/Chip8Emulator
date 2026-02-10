@@ -27,7 +27,7 @@ uint8_t fontset[FONSET_SIZE] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-Chip8::Chip8() {
+Chip8::Chip8() : randGen(std::chrono::system_clock::now().time_since_epoch().count()), randByte(0, 255) {
     pc = START_ADDRESS;
 
     // We clear the tables
@@ -178,6 +178,27 @@ void Chip8::OP_4xkk() {
     }
 }
 
-void Chip8::OP_NULL() {
-    
+void Chip8::OP_Fx07() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    registers[Vx] = delayTimer;
+}
+
+void Chip8::OP_Fx15() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    delayTimer = registers[Vx];
+}
+
+void Chip8::OP_Fx18() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    soundTimer = registers[Vx];
+}
+
+void Chip8::OP_Cxkk() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t kk = (opcode & 0x00FFu);
+
+    registers[Vx] = randByte(randGen) & kk;
+}
+
+void Chip8::OP_NULL() {    
 }
