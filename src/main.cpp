@@ -11,7 +11,6 @@ int main(int argc, char** argv) {
     int videoScale = 10;
     int cycleDelay = 2;
 
-    uint32_t videoPitch = 64 * sizeof(uint32_t);
     Platform platform("Chip 8 Emulator", 64 * videoScale, 32 * videoScale, 64, 32);
     Chip8 Chip8;
 

@@ -34,6 +34,7 @@ Chip8::Chip8() {
     for (int i = 0; i < 16; ++i) {
         table[i] = &Chip8::OP_NULL;
         table0[i] = &Chip8::OP_NULL;
+        table8[i] = &Chip8::OP_NULL;
         tableE[i] = &Chip8::OP_NULL;
     }
     for (int i = 0; i <= 0x65; ++i) {
@@ -151,4 +152,8 @@ void Chip8::OP_00E0() {
 
 void Chip8::OP_NULL() {
     
+}
+
+void Chip8::OP_00EE() {
+
 }

@@ -12,4 +12,6 @@ add_executable(chip8
     src/Platform.cpp
 )
 
+target_include_directories(chip8 PRIVATE ${SDL2_INCLUDE_DIRS})
+
 target_link_libraries(chip8 PRIVATE SDL2::SDL2)
