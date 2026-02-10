@@ -2,7 +2,7 @@
 
 Platform::Platform(char const* title, int windowWidth, int windowHeight, int textureWidth, int textureHeight) {
     SDL_Init(SDL_INIT_VIDEO);
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, textureWidth, textureHeight, SDL_WINDOW_SHOWN);    
+    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);    
     if (!window) {
         printf("Failed to create window: %s", SDL_GetError());
         exit(1);
@@ -67,5 +67,6 @@ bool Platform::ProcessInput(uint8_t* keys) {
             }
         }
     }
+    // std::cout << "Polling done." << std::endl;
     return quit;
 }
