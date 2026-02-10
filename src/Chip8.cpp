@@ -37,7 +37,7 @@ Chip8::Chip8() {
         table8[i] = &Chip8::OP_NULL;
         tableE[i] = &Chip8::OP_NULL;
     }
-    for (int i = 0; i <= 0x65; ++i) {
+    for (int i = 0; i <= 0xFF; ++i) {
         tableF[i] = &Chip8::OP_NULL;
     }
 
@@ -134,13 +134,14 @@ void Chip8::OP_Dxyn() {
 
         for (unsigned int col = 0; col < 8; ++col) {
             uint8_t spritePixel = spriteByte & (0x80u >> col);
-            uint32_t* screenPixel = &video[(yPos + row) * 64 + (xPos + col)];
-
-            if (spritePixel) {
-                if (*screenPixel == 0xFFFFFFFF) {
-                    registers[0xF] = 1;
+            if ((yPos + row) < 32 && (xPos + col) < 64) {
+                uint32_t* screenPixel = &video[(yPos + row) * 64 + (xPos + col)];
+                if (spritePixel) {
+                    if (*screenPixel == 0xFFFFFFFF) {
+                        registers[0xF] = 1;
+                    }
+                    *screenPixel ^= 0xFFFFFFFF;
                 }
-                *screenPixel ^= 0xFFFFFFFF;
             }
         }
     }

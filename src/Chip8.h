@@ -44,7 +44,7 @@ class Chip8 {
         Chip8Func table0[16];
         Chip8Func table8[16];
         Chip8Func tableE[16];
-        Chip8Func tableF[66];
+        Chip8Func tableF[256];
         
         uint16_t opcode;
 };
