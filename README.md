@@ -54,16 +54,29 @@ To run a ROM, provide the path to the `.ch8` file as a command-line argument:
 
 The original CHIP-8 used a 4x4 hex keypad. This emulator maps those keys to your QWERTY keyboard as follows:
 
-| CHIP-8 Key | QWERTY Map | CHIP-8 Key | QWERTY Map |
-| ---------- | ---------- | ---------- | ---------- |
-| **1**      | 1          | **2**      | 2          |
-| **3**      | 3          | **C**      | 4          |
-| **4**      | Q          | **5**      | W          |
-| **6**      | E          | **D**      | R          |
-| **7**      | A          | **8**      | S          |
-| **9**      | D          | **E**      | F          |
-| **A**      | Z          | **0**      | X          |
-| **B**      | C          | **F**      | V          |
+| Chip-8 Key | QWERTY Key | Chip-8 Key | QWERTY Key |
+| :--------: | :--------: | :--------: | :--------: |
+|   **1**    |   **1**    |   **2**    |   **2**    |
+|   **3**    |   **3**    |   **C**    |   **4**    |
+|   **4**    |   **Q**    |   **5**    |   **W**    |
+|   **6**    |   **E**    |   **D**    |   **R**    |
+|   **7**    |   **A**    |   **8**    |   **S**    |
+|   **9**    |   **D**    |   **E**    |   **F**    |
+|   **A**    |   **Z**    |   **0**    |   **X**    |
+|   **B**    |   **C**    |   **F**    |   **V**    |
+
+> **💡 Tip:** If a game like _Space Invaders_ says "Press 4 to go Left", it refers to the **Chip-8 Key 4**. Check the table above → You should press **Q** on your keyboard.
+
+## Sample Games
+
+<p align="center">
+  <img src="documents/SpaceInvaders.png" alt="Space Invaders" width="30%" />
+  <img src="documents/breakout.png" alt="Breakout" width="30%" />
+  <img src="documents/AnimalRace.png" alt="Animal Race" width="30%" />
+</p>
+<p align="center">
+  <i>Space Invaders • Breakout • Animal Race</i>
+</p>
 
 ---
 
