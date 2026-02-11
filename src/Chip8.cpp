@@ -30,6 +30,12 @@ uint8_t fontset[FONSET_SIZE] = {
 Chip8::Chip8() : randGen(std::chrono::system_clock::now().time_since_epoch().count()), randByte(0, 255) {
     pc = START_ADDRESS;
 
+    memset(video, 0, sizeof(video));
+    
+    // OP_00E0();
+
+    // memset(video, 0, sizeof(video));
+
     // We clear the tables
     for (int i = 0; i < 16; ++i) {
         table[i] = &Chip8::OP_NULL;
@@ -137,22 +143,22 @@ void Chip8::OP_Dxyn() {
     uint8_t xPos = registers[Vx] % 64;
     uint8_t yPos = registers[Vy] % 32;
 
-    registers[0xF] = 0; // Reset collision flag
+    registers[0xF] = 0;
 
     for (unsigned int row = 0; row < height; ++row) {
-        // Fetch the sprite byte from memory starting at the 'index' register
         uint8_t spriteByte = memory[index + row];
-
         for (unsigned int col = 0; col < 8; ++col) {
             uint8_t spritePixel = spriteByte & (0x80u >> col);
-            if ((yPos + row) < 32 && (xPos + col) < 64) {
-                uint32_t* screenPixel = &video[(yPos + row) * 64 + (xPos + col)];
-                if (spritePixel) {
-                    if (*screenPixel == 0xFFFFFFFF) {
-                        registers[0xF] = 1;
-                    }
-                    *screenPixel ^= 0xFFFFFFFF;
+
+            unsigned int x = (xPos + col) % 64;
+            unsigned int y = (yPos + row) % 32;
+
+            if (spritePixel) {
+                uint32_t* screenPixel = &video[y * 64 + x];
+                if (*screenPixel == 0xFFFFFFFF) {
+                    registers[0xF] = 1;
                 }
+                *screenPixel ^= 0xFFFFFFFF;
             }
         }
     }
