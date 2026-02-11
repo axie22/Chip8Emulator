@@ -78,8 +78,14 @@ void Chip8::LoadROM(char const* filename) {
 void Chip8::Cycle() {
     opcode = (memory[pc] << 8) | memory[pc + 1];
     pc += 2;
-
     (this->*table[(opcode & 0xF000) >> 12])();
+    if (delayTimer > 0) {
+        --delayTimer;
+    }
+
+    if (soundTimer > 0) {
+        --soundTimer;
+    }
 }
 
 void Chip8::OP_1nnn() {
