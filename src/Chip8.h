@@ -3,6 +3,7 @@
 
 #include <cstdint> 
 #include <random>
+#include <iterator>
 
 class Chip8 {
     public:
@@ -43,6 +44,12 @@ class Chip8 {
         void OP_Fx07(); // Set Vx = delay timer value
         void OP_Fx15(); // Set delay timer = Vx
         void OP_Fx18(); // Set sound timer = Vx
+        void OP_Fx0A(); // Wait for a key press, store value of key in Vx
+        void OP_Fx1E(); // ADD I, Vx
+        void OP_Fx29(); // LD F, Vx
+        void OP_Fx33(); // LD B, Vx
+        void OP_Fx55(); // LD [I], Vx
+        void OP_Fx65(); // LD Vx, [I] 
         void OP_Annn(); // LD I, addr (Set Index = nnn)
         void OP_Dxyn(); // DRW Vx, Vy, nibble (Draw)
         void OP_Cxkk(); // Set Vx = random byte & kk

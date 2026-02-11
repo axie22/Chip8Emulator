@@ -302,5 +302,54 @@ void Chip8::OP_8xyE() {
     registers[Vx] <<= 1;
 }
 
+void Chip8::OP_Fx0A() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    bool found = false;
+    for (int i = 0; i < std::size(keypad); ++i) {
+        if (keypad[i]) {
+            registers[Vx] = i;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        pc -= 2;
+    }
+}
+
+void Chip8::OP_Fx1E() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    index += registers[Vx];
+}
+
+void Chip8::OP_Fx29() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    index = FONTSET_START_ADDRESS + (5 * registers[Vx]);
+}
+
+void Chip8::OP_Fx33() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t value = registers[Vx];
+    memory[index + 2] = value % 10;
+    value /= 10;
+    memory[index + 1] = value % 10;
+    value /= 10;
+    memory[index] = value % 10;
+}
+
+void Chip8::OP_Fx55() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    for (int i = 0; i <= Vx; ++i) {
+        memory[index + i] = registers[i];
+    }
+}
+
+void Chip8::OP_Fx65() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    for (int i = 0; i <= Vx; ++i) {
+        registers[i] = memory[index + i];
+    }
+}
+
 void Chip8::OP_NULL() {    
 }
