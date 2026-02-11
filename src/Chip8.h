@@ -31,6 +31,15 @@ class Chip8 {
         void OP_4xkk(); // SNE (skip next instruction if Vx != kk)
         void OP_6xkk(); // LD Vx, byte (Set register Vx = kk)
         void OP_7xkk(); // ADD Vx, byte (Set register Vx = Vx + kk)
+        void OP_8xy0(); // Stores value of register Vy in register Vx
+        void OP_8xy1(); // Set Vx = Vx OR Vy
+        void OP_8xy2(); // Set Vx = Vx AND Vy
+        void OP_8xy3(); // Set Vx = Vx XOR Vy
+        void OP_8xy4(); // ADD Vx, Vy
+        void OP_8xy5(); // SUB Vx, Vy
+        void OP_8xy6(); // SHR Vx {, Vy}
+        void OP_8xy7(); // SUBN Vx, Vy
+        void OP_8xyE(); // SHL Vx {, Vy}
         void OP_Fx07(); // Set Vx = delay timer value
         void OP_Fx15(); // Set delay timer = Vx
         void OP_Fx18(); // Set sound timer = Vx
