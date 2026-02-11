@@ -31,10 +31,6 @@ Chip8::Chip8() : randGen(std::chrono::system_clock::now().time_since_epoch().cou
     pc = START_ADDRESS;
 
     memset(video, 0, sizeof(video));
-    
-    // OP_00E0();
-
-    // memset(video, 0, sizeof(video));
 
     // We clear the tables
     for (int i = 0; i < 16; ++i) {
@@ -85,6 +81,9 @@ void Chip8::Cycle() {
     opcode = (memory[pc] << 8) | memory[pc + 1];
     pc += 2;
     (this->*table[(opcode & 0xF000) >> 12])();
+}
+
+void Chip8::UpdateTimers() {
     if (delayTimer > 0) {
         --delayTimer;
     }
@@ -95,7 +94,7 @@ void Chip8::Cycle() {
 }
 
 void Chip8::OP_1nnn() {
-    pc = (opcode & 0x0FFF);
+    pc = (opcode & 0x0FFFu);
 }
 
 void Chip8::Table0() {
@@ -127,8 +126,7 @@ void Chip8::OP_7xkk() {
 }
 
 void Chip8::OP_Annn() {
-    uint16_t address = (opcode & 0x0FFFu);
-    index = address;
+    index = (opcode & 0x0FFFu);
 }
 
 void Chip8::OP_Bnnn() {

@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
 
     int videoPitch = sizeof(Chip8.video[0]) * 64;
     auto lastCycleTime = std::chrono::high_resolution_clock::now();
+    auto lastTimerTime = std::chrono::high_resolution_clock::now();
     bool quit = false;
 
     while (!quit) {
@@ -25,11 +26,17 @@ int main(int argc, char** argv) {
 
         auto currentTime = std::chrono::high_resolution_clock::now();
         float dt = std::chrono::duration<float, std::chrono::milliseconds::period>(currentTime - lastCycleTime).count();
+        float dtTimer = std::chrono::duration<float, std::chrono::milliseconds::period>(currentTime - lastTimerTime).count();
 
         if (dt > cycleDelay) {
             lastCycleTime = currentTime;
             Chip8.Cycle();
             platform.Update(Chip8.video, videoPitch);
+        }
+
+        if (dtTimer > 16.67f) {
+            lastTimerTime = currentTime;
+            Chip8.UpdateTimers();
         }
     }
     

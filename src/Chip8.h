@@ -9,6 +9,7 @@ class Chip8 {
     public:
         Chip8();
         void Cycle();
+        void UpdateTimers();
         void LoadROM(char const* filename);
 
         uint8_t registers[16]{};
