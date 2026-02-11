@@ -200,5 +200,37 @@ void Chip8::OP_Cxkk() {
     registers[Vx] = randByte(randGen) & kk;
 }
 
+void Chip8::OP_5xy0() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+    if (registers[Vx] == registers[Vy]) {
+        pc += 2;
+    }
+}
+
+void Chip8::OP_9xy0() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+    if (registers[Vx] != registers[Vy]) {
+        pc += 2;
+    }
+}
+
+void Chip8::OP_Ex9E() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t key = registers[Vx];
+    if (keypad[key]) {
+        pc += 2;
+    }
+}
+
+void Chip8::OP_ExA1() {
+    uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t key = registers[Vx];
+    if (!keypad[key]) {
+        pc += 2;
+    }
+}
+
 void Chip8::OP_NULL() {    
 }

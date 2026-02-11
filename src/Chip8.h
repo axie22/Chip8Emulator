@@ -37,6 +37,11 @@ class Chip8 {
         void OP_Annn(); // LD I, addr (Set Index = nnn)
         void OP_Dxyn(); // DRW Vx, Vy, nibble (Draw)
         void OP_Cxkk(); // Set Vx = random byte & kk
+        void OP_5xy0(); // Skip next instruction if Vx == kk
+        void OP_9xy0(); // Skip next instruction if Vx != Vy
+        void OP_Ex9E(); // Skip next instruction if key with value of Vx is pressed
+        void OP_ExA1(); // Skip next instruction if key with value of Vx not pressed
+
     
         // HELPERS:
         void Table0();
@@ -54,7 +59,7 @@ class Chip8 {
         Chip8Func tableF[256];
         
         uint16_t opcode;
-        
+
     private:
         std::default_random_engine randGen;
         std::uniform_int_distribution<uint8_t> randByte;
