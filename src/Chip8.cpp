@@ -125,6 +125,11 @@ void Chip8::OP_Annn() {
     index = address;
 }
 
+void Chip8::OP_Bnnn() {
+    uint16_t address = (opcode & 0x0FFFu);
+    pc = address + registers[0x0];
+}
+
 void Chip8::OP_Dxyn() {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
     uint8_t Vy = (opcode & 0x00F0u) >> 4u;

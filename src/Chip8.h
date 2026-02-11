@@ -51,6 +51,7 @@ class Chip8 {
         void OP_Fx55(); // LD [I], Vx
         void OP_Fx65(); // LD Vx, [I] 
         void OP_Annn(); // LD I, addr (Set Index = nnn)
+        void OP_Bnnn(); // JP V0, addr
         void OP_Dxyn(); // DRW Vx, Vy, nibble (Draw)
         void OP_Cxkk(); // Set Vx = random byte & kk
         void OP_5xy0(); // Skip next instruction if Vx == kk
