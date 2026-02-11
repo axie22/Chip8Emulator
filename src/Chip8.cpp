@@ -31,6 +31,10 @@ Chip8::Chip8() : randGen(std::chrono::system_clock::now().time_since_epoch().cou
     pc = START_ADDRESS;
 
     memset(video, 0, sizeof(video));
+    
+    // OP_00E0();
+
+    // memset(video, 0, sizeof(video));
 
     // We clear the tables
     for (int i = 0; i < 16; ++i) {
@@ -46,14 +50,47 @@ Chip8::Chip8() : randGen(std::chrono::system_clock::now().time_since_epoch().cou
     // Setup main table pointers
     table[0x0] = &Chip8::Table0;
     table[0x1] = &Chip8::OP_1nnn;
+    table[0x2] = &Chip8::OP_2nnn;
+    table[0x3] = &Chip8::OP_3xkk;
+    table[0x4] = &Chip8::OP_4xkk;
+    table[0x5] = &Chip8::OP_5xy0;
     table[0x6] = &Chip8::OP_6xkk;
     table[0x7] = &Chip8::OP_7xkk;
+    table[0x8] = &Chip8::Table8;
+    table[0x9] = &Chip8::OP_9xy0;
     table[0xA] = &Chip8::OP_Annn;
+    table[0xB] = &Chip8::OP_Bnnn;
+    table[0xC] = &Chip8::OP_Cxkk;
     table[0xD] = &Chip8::OP_Dxyn;
+    table[0xE] = &Chip8::TableE;
+    table[0xF] = &Chip8::TableF;
 
     // Setup helper tables
     table0[0x0] = &Chip8::OP_00E0;
     table0[0xE] = &Chip8::OP_00EE;
+
+    table8[0x0] = &Chip8::OP_8xy0;
+    table8[0x1] = &Chip8::OP_8xy1;
+    table8[0x2] = &Chip8::OP_8xy2;
+    table8[0x3] = &Chip8::OP_8xy3;
+    table8[0x4] = &Chip8::OP_8xy4;
+    table8[0x5] = &Chip8::OP_8xy5;
+    table8[0x6] = &Chip8::OP_8xy6;
+    table8[0x7] = &Chip8::OP_8xy7;
+    table8[0xE] = &Chip8::OP_8xyE;
+
+    tableE[0x1] = &Chip8::OP_ExA1;
+    tableE[0xE] = &Chip8::OP_Ex9E;
+
+    tableF[0x07] = &Chip8::OP_Fx07;
+    tableF[0x15] = &Chip8::OP_Fx15;
+    tableF[0x18] = &Chip8::OP_Fx18;
+    tableF[0x1E] = &Chip8::OP_Fx1E;
+    tableF[0x0A] = &Chip8::OP_Fx0A;
+    tableF[0x29] = &Chip8::OP_Fx29;
+    tableF[0x33] = &Chip8::OP_Fx33;
+    tableF[0x55] = &Chip8::OP_Fx55;
+    tableF[0x65] = &Chip8::OP_Fx65;
 
     // Load fontset into memory
     for (unsigned int i = 0; i < FONSET_SIZE; ++i) {
@@ -81,6 +118,13 @@ void Chip8::Cycle() {
     opcode = (memory[pc] << 8) | memory[pc + 1];
     pc += 2;
     (this->*table[(opcode & 0xF000) >> 12])();
+    if (delayTimer > 0) {
+        --delayTimer;
+    }
+
+    if (soundTimer > 0) {
+        --soundTimer;
+    }
 }
 
 void Chip8::UpdateTimers() {
@@ -94,7 +138,7 @@ void Chip8::UpdateTimers() {
 }
 
 void Chip8::OP_1nnn() {
-    pc = (opcode & 0x0FFFu);
+    pc = (opcode & 0x0FFF);
 }
 
 void Chip8::Table0() {
@@ -126,7 +170,8 @@ void Chip8::OP_7xkk() {
 }
 
 void Chip8::OP_Annn() {
-    index = (opcode & 0x0FFFu);
+    uint16_t address = (opcode & 0x0FFFu);
+    index = address;
 }
 
 void Chip8::OP_Bnnn() {
@@ -296,6 +341,8 @@ void Chip8::OP_8xy5() {
 
 void Chip8::OP_8xy6() {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+    registers[Vx] = registers[Vy];
     registers[0xF] = (registers[Vx] & 0x1u);
     registers[Vx] >>= 1;
 }
@@ -313,6 +360,8 @@ void Chip8::OP_8xy7() {
 
 void Chip8::OP_8xyE() {
     uint8_t Vx = (opcode & 0x0F00u) >> 8u;
+    uint8_t Vy = (opcode & 0x00F0u) >> 4u;
+    registers[Vx] = registers[Vy];
     registers[0xF] = (registers[Vx] & 0x80u) >> 7u;
     registers[Vx] <<= 1;
 }
@@ -357,6 +406,7 @@ void Chip8::OP_Fx55() {
     for (int i = 0; i <= Vx; ++i) {
         memory[index + i] = registers[i];
     }
+    index += Vx + 1;
 }
 
 void Chip8::OP_Fx65() {
@@ -364,6 +414,7 @@ void Chip8::OP_Fx65() {
     for (int i = 0; i <= Vx; ++i) {
         registers[i] = memory[index + i];
     }
+    index += Vx + 1;
 }
 
 void Chip8::OP_NULL() {    
